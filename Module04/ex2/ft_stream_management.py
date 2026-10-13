@@ -31,7 +31,10 @@ def read_archive(filename: str) -> str | None:
 
 
 def transform_data(content: str) -> str:
-    return "".join(line + "#\n" for line in content.splitlines())
+    lines = []
+    for line in content.splitlines():
+        lines.append(line + "#\n")
+    return "".join(lines)
 
 
 def save_archive(filename: str, content: str) -> bool:

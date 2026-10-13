@@ -11,7 +11,7 @@ def main() -> None:
     print(f"New list with all names capitalized: {capitalized}")
     print(f"New list of capitalized names only: {initial_capitals}")
     scores = {name: random.randint(0, 1000) for name in capitalized}
-    average = sum(scores.values()) / len(scores) if scores else 0.0
+    average = sum(scores.values()) / len(scores)
     high_scores = {name: score for name, score in scores.items()
                    if score > average}
     print(f"Score dict: {scores}")

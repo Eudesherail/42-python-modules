@@ -34,7 +34,9 @@ def main() -> None:
     total = sum(inventory.values())
     print(f"Total quantity of the {len(items)} items: {total}")
     for item in inventory:
-        percentage = round(inventory[item] / total * 100, 1) if total else 0.0
+        percentage = 0.0
+        if total > 0:
+            percentage = round(inventory[item] / total * 100, 1)
         print(f"Item {item} represents {percentage}%")
     if items:
         most = least = items[0]

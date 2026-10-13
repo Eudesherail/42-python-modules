@@ -40,7 +40,10 @@ class NumericProcessor(DataProcessor):
 
     def validate(self, data: Any) -> bool:
         if isinstance(data, list):
-            return all(type(item) in (int, float) for item in data)
+            for item in data:
+                if type(item) not in (int, float):
+                    return False
+            return True
         return type(data) in (int, float)
 
     def ingest(self, data: int | float | list[int | float]) -> None:
@@ -55,27 +58,36 @@ class TextProcessor(DataProcessor):
 
     def validate(self, data: Any) -> bool:
         if isinstance(data, list):
-            return all(isinstance(item, str) for item in data)
+            for item in data:
+                if not isinstance(item, str):
+                    return False
+            return True
         return isinstance(data, str)
 
     def ingest(self, data: str | list[str]) -> None:
         if not self.validate(data):
             raise ValueError("Improper text data")
-        values = data if isinstance(data, list) else [data]
-        self._store(list(values))
+        if isinstance(data, list):
+            self._store(data)
+        else:
+            self._store([data])
 
 
 class LogProcessor(DataProcessor):
     """Accept arbitrary string dictionaries, including standard log entries."""
 
     def validate(self, data: Any) -> bool:
-        values = data if isinstance(data, list) else [data]
-        return all(
-            isinstance(item, dict)
-            and all(isinstance(key, str) and isinstance(value, str)
-                    for key, value in item.items())
-            for item in values
-        )
+        if isinstance(data, list):
+            entries = data
+        else:
+            entries = [data]
+        for entry in entries:
+            if not isinstance(entry, dict):
+                return False
+            for key, value in entry.items():
+                if not isinstance(key, str) or not isinstance(value, str):
+                    return False
+        return True
 
     def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
         if not self.validate(data):

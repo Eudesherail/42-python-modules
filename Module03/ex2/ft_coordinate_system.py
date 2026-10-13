@@ -10,17 +10,17 @@ def get_player_pos() -> tuple[float, float, float]:
             print("Invalid syntax")
             continue
         values: list[float] = []
-        for parameter in (first, second, third):
-            try:
+        try:
+            for parameter in (first, second, third):
                 value = float(parameter)
-                if value != value or value in (float("inf"), -float("inf")):
+                # NaN and infinities are not usable coordinates.
+                if not -float("inf") < value < float("inf"):
                     raise ValueError("coordinate must be finite")
                 values.append(value)
-            except ValueError as error:
-                print(f"Error on parameter '{parameter}': {error}")
-                break
-        else:
-            return values[0], values[1], values[2]
+        except ValueError as error:
+            print(f"Error on parameter '{parameter}': {error}")
+            continue
+        return values[0], values[1], values[2]
 
 
 def distance(first: tuple[float, float, float],

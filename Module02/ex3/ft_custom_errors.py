@@ -1,22 +1,22 @@
 class GardenError(Exception):
-    """Base error with a default message without extra authorized builtins."""
+    """A general garden problem."""
 
     def __init__(self, message: str = "Unknown garden error") -> None:
-        self.args = (message,)
+        Exception.__init__(self, message)
 
 
 class PlantError(GardenError):
     """A problem specific to a plant."""
 
     def __init__(self, message: str = "Unknown plant error") -> None:
-        self.args = (message,)
+        GardenError.__init__(self, message)
 
 
 class WaterError(GardenError):
     """A problem specific to watering."""
 
     def __init__(self, message: str = "Unknown water error") -> None:
-        self.args = (message,)
+        GardenError.__init__(self, message)
 
 
 def check_plant(wilting: bool) -> None:
